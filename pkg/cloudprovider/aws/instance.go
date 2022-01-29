@@ -113,6 +113,9 @@ func (p *InstanceProvider) launchInstances(ctx context.Context, constraints *v1a
 	if err != nil {
 		return nil, fmt.Errorf("getting launch template configs, %w", err)
 	}
+
+	logging.FromContext(ctx).Infof("LaunchTemplateId: %s", launchTemplateConfigs[0].LaunchTemplateSpecification.LaunchTemplateId)
+
 	// Create fleet
 	createFleetInput := &ec2.CreateFleetInput{
 		Type:                  aws.String(ec2.FleetTypeInstant),

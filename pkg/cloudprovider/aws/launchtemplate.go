@@ -207,7 +207,7 @@ func (p *LaunchTemplateProvider) createLaunchTemplate(ctx context.Context, optio
 	if err != nil {
 		return nil, err
 	}
-	logging.FromContext(ctx).Debugf("Created launch template, %s", *output.LaunchTemplate.LaunchTemplateName)
+	logging.FromContext(ctx).Infof("Created launch template, %s (%s)", *output.LaunchTemplate.LaunchTemplateName, *output.LaunchTemplate.LaunchTemplateId)
 	return output.LaunchTemplate, nil
 }
 
