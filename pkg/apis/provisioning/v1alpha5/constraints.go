@@ -57,7 +57,6 @@ func (c *Constraints) ValidatePod(pod *v1.Pod) error {
 	if err := c.Taints.ToleratesWithIgnores(pod, c.TaintsToIgnore); err != nil {
 		return err
 	}
-
 	requirements := NewPodRequirements(pod)
 	// Test if pod requirements are valid
 	if err := requirements.Validate(); err != nil {
