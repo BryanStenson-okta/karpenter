@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SNAPSHOT_TAG=$(bryan-dont-bind)
+SNAPSHOT_TAG=taintsToIgnoreSlowSpawn-$(git rev-parse --short head)
 RELEASE_REPO=${RELEASE_REPO:-405659752715.dkr.ecr.us-west-2.amazonaws.com/mirror/public.ecr.aws/karpenter}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
