@@ -59,7 +59,7 @@ func NewNode(provisioner *v1alpha5.Provisioner, topology *Topology, daemonResour
 
 func (n *Node) Add(pod *v1.Pod) error {
 	// Check tolerations
-	if err := n.Provisioner.Spec.Taints.Tolerates(pod); err != nil {
+	if err := n.Provisioner.Spec.Taints.ToleratesWithIgnores(pod, n.Provisioner.Spec.TaintsToIgnore); err != nil {
 		return err
 	}
 

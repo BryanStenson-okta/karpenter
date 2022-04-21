@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SNAPSHOT_TAG=$(git describe --tags --always)
-RELEASE_REPO=${RELEASE_REPO:-public.ecr.aws/karpenter}
+SNAPSHOT_TAG=$(bryan-dont-bind)
+RELEASE_REPO=${RELEASE_REPO:-405659752715.dkr.ecr.us-west-2.amazonaws.com/mirror/public.ecr.aws/karpenter}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "${SCRIPT_DIR}/release_common.sh"
@@ -39,6 +39,6 @@ website() {
 requireCloudProvider
 authenticate
 buildImages $RELEASE_VERSION
-cosignImages
+#cosignImages
 chart
-website
+#website

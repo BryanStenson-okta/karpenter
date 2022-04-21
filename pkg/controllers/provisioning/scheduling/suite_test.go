@@ -1143,7 +1143,7 @@ var _ = Describe("Topology", func() {
 				LabelSelector:     &metav1.LabelSelector{MatchLabels: labels},
 				MaxSkew:           1,
 			}}
-			ExpectApplied(ctx, env.Client,  provisioner, firstNode, secondNode, thirdNode, &v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: wrongNamespace}})
+			ExpectApplied(ctx, env.Client, provisioner, firstNode, secondNode, thirdNode, &v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: wrongNamespace}})
 			ExpectProvisioned(ctx, env.Client, controller,
 				test.Pod(test.PodOptions{NodeName: firstNode.Name}),                                                                                                                         // ignored, missing labels
 				test.Pod(test.PodOptions{ObjectMeta: metav1.ObjectMeta{Labels: labels}}),                                                                                                    // ignored, pending
@@ -2555,8 +2555,9 @@ var _ = Describe("Taints", func() {
 	It("should provision nodes with taints and schedule pods, ignoring missing tolerations in the taintsToIgnore list", func() {
 		provisioner.Spec.Taints = []v1.Taint{{Key: "ignore-me", Value: "nothing-to-see-here", Effect: v1.TaintEffectNoSchedule}}
 		provisioner.Spec.TaintsToIgnore = []v1.Taint{{Key: "ignore-me", Value: "nothing-to-see-here", Effect: v1.TaintEffectNoSchedule}}
+		ExpectApplied(ctx, env.Client, provisioner)
 
-		pod := ExpectProvisioned(ctx, env.Client, selectionController, provisioners, provisioner, test.UnschedulablePod())[0]
+		pod := ExpectProvisioned(ctx, env.Client, controller, test.UnschedulablePod())[0]
 		ExpectScheduled(ctx, env.Client, pod)
 	})
 	It("should not generate taints for OpExists", func() {

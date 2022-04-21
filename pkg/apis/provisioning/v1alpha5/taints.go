@@ -44,9 +44,10 @@ func (ts Taints) HasKey(taintKey string) bool {
 	return false
 }
 
+var emptyIgnoreList Taints
+
 // Tolerates returns true if the pod tolerates all taints
 func (ts Taints) Tolerates(pod *v1.Pod) (errs error) {
-	var emptyIgnoreList Taints
 	return ts.ToleratesWithIgnores(pod, emptyIgnoreList)
 }
 

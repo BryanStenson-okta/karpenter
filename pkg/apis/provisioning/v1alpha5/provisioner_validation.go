@@ -66,6 +66,7 @@ func (s *ProvisionerSpec) Validate(ctx context.Context) (errs *apis.FieldError) 
 	return errs.Also(
 		s.validateLabels(),
 		s.validateTaints(),
+		s.validateTaintsToIgnore(),
 		s.validateRequirements(),
 	)
 }
@@ -87,6 +88,31 @@ func (s *ProvisionerSpec) validateLabels() (errs *apis.FieldError) {
 
 func (s *ProvisionerSpec) validateTaints() (errs *apis.FieldError) {
 	for i, taint := range s.Taints {
+		// Validate Key
+		if len(taint.Key) == 0 {
+			errs = errs.Also(apis.ErrInvalidArrayValue(errs, "taints", i))
+		}
+		for _, err := range validation.IsQualifiedName(taint.Key) {
+			errs = errs.Also(apis.ErrInvalidArrayValue(err, "taints", i))
+		}
+		// Validate Value
+		if len(taint.Value) != 0 {
+			for _, err := range validation.IsQualifiedName(taint.Value) {
+				errs = errs.Also(apis.ErrInvalidArrayValue(err, "taints", i))
+			}
+		}
+		// Validate effect
+		switch taint.Effect {
+		case v1.TaintEffectNoSchedule, v1.TaintEffectPreferNoSchedule, v1.TaintEffectNoExecute, "":
+		default:
+			errs = errs.Also(apis.ErrInvalidArrayValue(taint.Effect, "effect", i))
+		}
+	}
+	return errs
+}
+
+func (s *ProvisionerSpec) validateTaintsToIgnore() (errs *apis.FieldError) {
+	for i, taint := range s.TaintsToIgnore {
 		// Validate Key
 		if len(taint.Key) == 0 {
 			errs = errs.Also(apis.ErrInvalidArrayValue(errs, "taints", i))
