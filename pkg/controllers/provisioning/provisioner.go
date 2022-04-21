@@ -17,6 +17,7 @@ package provisioning
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/imdario/mergo"
 	"github.com/prometheus/client_golang/prometheus"
@@ -220,6 +221,13 @@ func (p *Provisioner) launch(ctx context.Context, node *scheduling.Node) error {
 	if err := p.bind(ctx, k8sNode, node.Pods); err != nil {
 		return fmt.Errorf("binding pods, %w", err)
 	}
+
+	// with taintsToIgnore, we need to slow down node spawning otherwise, we'll end
+	// up with too many nodes too quickly -- this is a crude way to make this PR work
+	// https://github.com/aws/karpenter/pull/1671
+	logging.FromContext(ctx).Infof("launched %s, waiting 30 seconds to reduce node churn", k8sNode.Name)
+	time.Sleep(30 * time.Second)
+
 	return nil
 }
 
