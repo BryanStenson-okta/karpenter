@@ -4,7 +4,7 @@ set -euo pipefail
 CURRENT_MAJOR_VERSION="0"
 HELM_CHART_VERSION="v${CURRENT_MAJOR_VERSION}-${SNAPSHOT_TAG}"
 RELEASE_VERSION=${RELEASE_VERSION:-"${SNAPSHOT_TAG}"}
-RELEASE_PLATFORM="--platform=linux/amd64,linux/arm64"
+RELEASE_PLATFORM="--platform=linux/amd64"
 
 requireCloudProvider(){
   if [ -z "$CLOUD_PROVIDER" ]; then
@@ -14,7 +14,7 @@ requireCloudProvider(){
 }
 
 authenticate() {
-  aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${RELEASE_REPO}
+  aws ecr get-login-password | docker login --username AWS --password-stdin ${RELEASE_REPO}
 }
 
 
