@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SNAPSHOT_TAG=taintsToIgnoreSlowSpawn-$(git rev-parse --short head)
+SNAPSHOT_TAG=$(git describe --tags --always)-taintsToIgnoreSlowSpawn
 RELEASE_REPO=${RELEASE_REPO:-405659752715.dkr.ecr.us-west-2.amazonaws.com/mirror/public.ecr.aws/karpenter}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )

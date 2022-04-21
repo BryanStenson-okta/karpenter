@@ -22,8 +22,8 @@ buildImages() {
     HELM_CHART_VERSION=$1
     CONTROLLER_DIGEST=$(GOFLAGS=${GOFLAGS} KO_DOCKER_REPO=${RELEASE_REPO} ko publish -B -t ${RELEASE_VERSION} ${RELEASE_PLATFORM} ./cmd/controller)
     WEBHOOK_DIGEST=$(GOFLAGS=${GOFLAGS} KO_DOCKER_REPO=${RELEASE_REPO} ko publish -B -t ${RELEASE_VERSION} ${RELEASE_PLATFORM} ./cmd/webhook)
-    cat charts/karpenter/values.yaml | yq -y --arg digest ${CONTROLLER_DIGEST} '.controller.image=$digest' > charts/karpenter/values.yaml
-    cat charts/karpenter/values.yaml | yq -y --arg digest ${WEBHOOK_DIGEST} '.webhook.image=$digest' > charts/karpenter/values.yaml
-    cat charts/karpenter/Chart.yaml | yq -y --arg version ${RELEASE_VERSION} '.appVersion=$version' > charts/karpenter/Chart.yaml
-    cat charts/karpenter/Chart.yaml | yq -y --arg version ${HELM_CHART_VERSION} '.version=$version' > charts/karpenter/Chart.yaml
+    yq -y -i --arg digest ${CONTROLLER_DIGEST} '.controller.image=$digest' charts/karpenter/values.yaml
+    yq -y -i --arg digest ${WEBHOOK_DIGEST} '.webhook.image=$digest' charts/karpenter/values.yaml
+    yq -y -i --arg version ${RELEASE_VERSION} '.appVersion=$version' charts/karpenter/Chart.yaml
+    yq -y -i --arg version ${HELM_CHART_VERSION} '.version=$version' charts/karpenter/Chart.yaml
 }

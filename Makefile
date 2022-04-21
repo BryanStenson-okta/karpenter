@@ -2,7 +2,7 @@ export K8S_VERSION ?= 1.22.x
 export KUBEBUILDER_ASSETS ?= ${HOME}/.kubebuilder/bin
 
 ## Inject the app version into project.Version
-LDFLAGS ?= -ldflags=-X=github.com/aws/karpenter/pkg/utils/project.Version=taintsToIgnoreSlowSpawn-$(shell git rev-parse --short head)
+LDFLAGS ?= -ldflags=-X=github.com/aws/karpenter/pkg/utils/project.Version=$(shell git describe --tags --always)-taintsToIgnoreSlowSpawn
 GOFLAGS ?= -tags=$(CLOUD_PROVIDER) $(LDFLAGS)
 WITH_GOFLAGS = GOFLAGS="$(GOFLAGS)"
 
